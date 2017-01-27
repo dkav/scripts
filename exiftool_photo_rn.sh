@@ -4,5 +4,18 @@
 #
 # Usage: rn_photo <prefix>
 #
+# Options: -s Remove seconds from file name
 
-exiftool '-FileName<DateTimeOriginal' -d "%Y%m%dT%H%M%S%%-c$1.%%le" .
+
+fname="%Y%m%dT%H%M%S"
+
+while getopts ":s" opt; do
+  case ${opt} in
+    s) fname="%Y%m%dT%H%M" ;;
+    \?) echo "Invalid option: -$OPTARG" >&2 ;;
+  esac
+done
+
+shift $(($OPTIND - 1))
+
+exiftool '-FileName<DateTimeOriginal' -d $fname"%%-c$1.%%le" .
