@@ -2,7 +2,7 @@
 
 # Summary: Add prefix and timestamp to photo
 #
-# Usage: rn_photo <prefix>
+# Usage: rn_photo file/folder <prefix>
 #
 # Options: -s Remove seconds from file name
 
@@ -18,4 +18,4 @@ done
 
 shift $(($OPTIND - 1))
 
-exiftool '-FileName<DateTimeOriginal' -d $fname"%%-c$1.%%le" .
+exiftool '-FileName<DateTimeOriginal' -d $fname"%%-c$2.%%le" $1
