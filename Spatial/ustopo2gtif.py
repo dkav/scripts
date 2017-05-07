@@ -2,10 +2,8 @@
 
 Script extracts orthographic and/or topgraphy layers from USGS Topo
 GeoPFDs. The cutline is derived from the neatline stored in the
-metadata. A lossy (--lossy, -l) option will create a raster that
-is compressed in a JPEG format without an alpha layer. This can
-create edge issues which are visible when including overlapping
-rasters in the same map.
+metadata. A lossless (--lossless, -l) option will create a raster that
+is compressed using the DEFLATE lossless compression.
 
 
 """
@@ -23,15 +21,6 @@ BOTH = 'both'
 ORTHO = 'ortho'
 TOPO = 'topo'
 
-CUTLINE_FNAME = 'cutline.shp'
-
-GWARP_BASE = (' '.join([
-    'gdalwarp',
-    '-of GTiff',
-    '-overwrite',
-    '-crop_to_cutline',
-    '--config GDAL_PDF_BANDS 3']))
-
 
 def build_overview(ov_tiff):
     """Build tiff overviews."""
@@ -48,48 +37,56 @@ def build_overview(ov_tiff):
         '2 4 8 16']))
 
 
-def extract_topo(tinput_cmd, topo_path):
+def extract_topo(topo_in, topo_warp_opts):
     """Extract topographic map layers from GeoPDF."""
 
     print("Extracting topographic map layers.")
 
-    topo_tiff = ''.join([topo_path, '_topo.tif'])
-    ex_topo_cmd = (''.join([
-        tinput_cmd,
-        ' --config GDAL_PDF_LAYERS_OFF ',
-        'Map_Collar,',
-        'Images,',
-        'Map_Frame.Projection_and_Grids,',
-        'Map_Frame.Terrain.Shaded_Relief ',
-        topo_tiff]))
-    os.system(ex_topo_cmd)
-    build_overview(topo_tiff)
+    topo_out = ''.join([os.path.splitext(topo_in)[0], "_", TOPO,
+                        ".tif"])
+
+    gdal.SetConfigOption(
+        'GDAL_PDF_LAYERS_OFF',
+        'Map_Collar,'
+        'Images,'
+        'Map_Frame.Projection_and_Grids,'
+        'Map_Frame.Terrain.Shaded_Relief')
+    topo_in_ds = gdal.Open(topo_in)
+    gdal.Warp(topo_out, topo_in_ds, options=topo_warp_opts)
+    gdal.SetConfigOption('GDAL_PDF_LAYERS_OFF', None)
+    topo_in_ds = None
+
+    build_overview(topo_out)
 
 
-def extract_ortho(oinput_cmd, ortho_path):
+def extract_ortho(ortho_in, ortho_warp_opts):
     """Extract ortographic map layer from GeoPDF."""
 
     print("Extracting orthographic map layer.")
 
-    ortho_tiff = ''.join([ortho_path, '_ortho.tif'])
-    ex_ortho_cmd = (''.join([
-        oinput_cmd,
-        '--config GDAL_PDF_LAYERS ',
-        'Images.Orthoimage ',
-        ortho_tiff]))
-    os.system(ex_ortho_cmd)
-    build_overview(ortho_tiff)
+    ortho_out = ''.join([os.path.splitext(ortho_in)[0], "_", ORTHO,
+                         ".tif"])
+
+    gdal.SetConfigOption('GDAL_PDF_LAYERS', 'Images.Orthoimage')
+    ortho_in_ds = gdal.Open(ortho_in)
+    gdal.Warp(ortho_out, ortho_in_ds, options=ortho_warp_opts)
+    gdal.SetConfigOption('GDAL_PDF_LAYERS', None)
+    ortho_in_ds = None
+
+    build_overview(ortho_out)
 
 
-def create_cutline_shpfile(img_file):
+def create_cutline_shpfile(cut_img):
     """Making cutline shapefile from neatline metadata."""
 
-    cutline_shpfile = os.path.join(TMP_DIR, CUTLINE_FNAME)
+    cutline_fname = 'cutline.shp'
 
-    in_img = gdal.Open(img_file)
-    prj = in_img.GetProjection()
-    neatline_wkt = in_img.GetMetadataItem("NEATLINE")
-    in_img = None
+    cut_in_ds = gdal.Open(cut_img)
+    cutline_shpfile = os.path.join(TMP_DIR, cutline_fname)
+
+    prj = cut_in_ds.GetProjection()
+    neatline_wkt = cut_in_ds.GetMetadataItem("NEATLINE")
+    cut_in_ds = None
 
     out_srs = osr.SpatialReference(wkt=prj)
     nl_polygon = ogr.CreateGeometryFromWkt(neatline_wkt)
@@ -106,7 +103,7 @@ def create_cutline_shpfile(img_file):
     feature.SetGeometry(nl_polygon)
     feature.SetFID(feature_idx)
     layer.CreateFeature(feature)
-    shp_ds.Destroy()
+    shp_ds = None
 
     return cutline_shpfile
 
@@ -118,41 +115,40 @@ def main():
     parser.add_argument('--extract', '-e',
                         choices=[BOTH, ORTHO, TOPO],
                         default='both')
-    parser.add_argument('--lossy', '-l', action='store_true')
+    parser.add_argument('--lossless', '-l', action='store_true')
     parser.add_argument('filename', nargs='*')
     args = parser.parse_args()
 
-    if args.lossy:
-        gdal_base_cmd = (' '.join([
-            GWARP_BASE,
-            '-co compress=JPEG'
-            '-co PHOTOMETRIC=YCBCR']))
+    gdal.SetConfigOption('GDAL_PDF_BANDS', '3')
+    warp_options = {
+        "options": ['overwrite'],
+        "format": "GTiff",
+        "cropToCutline": True,
+        "dstAlpha": True}
+
+    if not args.lossless:
+        warp_options.update({
+            "creationOptions": ['compress=JPEG', 'JPEG_QUALITY=80']})
     else:
-        gdal_base_cmd = ' '.join([
-            GWARP_BASE,
-            '-dstalpha',
-            '-co compress=DEFLATE'])
+        warp_options.update({
+            "creationOptions": ['compress=DEFLATE', 'PREDICTOR=2']})
 
     for geopdf in args.filename:
         print("")
         print(' '.join(["*** Processing ", geopdf, " ***"]))
 
-        out_path = os.path.splitext(geopdf)[0]
-        cutline_file = create_cutline_shpfile(geopdf)
-
-        gdal_cmd = (' '.join([
-            gdal_base_cmd,
-            '-cutline', cutline_file,
-            geopdf]))
+        warp_options.update({"cutlineDSName": create_cutline_shpfile(geopdf)})
 
         if args.extract == BOTH:
-            extract_ortho(gdal_cmd, out_path)
+            extract_ortho(geopdf, gdal.WarpOptions(**warp_options))
             print("")
-            extract_topo(gdal_cmd, out_path)
+            extract_topo(geopdf, gdal.WarpOptions(**warp_options))
         elif args.extract == ORTHO:
-            extract_ortho(gdal_cmd, out_path)
+            extract_ortho(geopdf, gdal.WarpOptions(**warp_options))
         else:
-            extract_topo(gdal_cmd, out_path)
+            extract_topo(geopdf, gdal.WarpOptions(**warp_options))
+
+    gdal.SetConfigOption('GDAL_PDF_BANDS', None)
 
 
 def cleanup():
@@ -161,11 +157,6 @@ def cleanup():
 
 
 if __name__ == "__main__":
-    try:
-        TMP_DIR = tempfile.mkdtemp()
-    finally:
-        print("Failed to create temp directory")
-        exit()
-
+    TMP_DIR = tempfile.mkdtemp()
     atexit.register(cleanup)
     main()
