@@ -1,5 +1,6 @@
 #!/bin/bash
 
-# Create a Bootable OS X Yosemite Installer
-echo "Creating a Bootable OS X Yosemite Installer"
-sudo /Volumes/Mount\ Hood/Installations/Install\ OS\ X\ Yosemite.app/Contents/Resources/createinstallmedia --volume /Volumes/Untitled --applicationpath /Volumes/Mount\ Hood/Installations/Install\ OS\ X\ Yosemite.app --nointeraction
+# Create a Bootable macOS High Sierra Installer
+echo "Creating a Bootable macOS High Sierra Installer"
+
+sudo /Volumes/Mount\ Hood/Installations/Install\ macOS\ High\ Sierra.app/Contents/Resources/createinstallmedia --volume /Volumes/Untitled --applicationpath /Volumes/Mount\ Hood/Install\ macOS\ High\ Sierra.app --nointeraction
