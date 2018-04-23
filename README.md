@@ -1,2 +1,2 @@
 # Scripts
-Miscellaneous scripts
+Miscellaneous scripts organized in folders by category/type.
