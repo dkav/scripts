@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 # Summary: Compact VirtualBox virtual disk
 #

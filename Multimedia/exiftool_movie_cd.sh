@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 # Script to append original recording date and time to DV clips
 

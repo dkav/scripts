@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 # Summary: Add timestamp and suffix to photo
 #

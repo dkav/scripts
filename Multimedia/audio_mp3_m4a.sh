@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 # Script to convert mp3 spoken audio files to low bit rate
 # m4a files using OS X's afconvert

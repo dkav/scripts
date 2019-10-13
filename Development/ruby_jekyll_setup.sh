@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 # Summary: Setup Ruby for Jekyll website project
 #

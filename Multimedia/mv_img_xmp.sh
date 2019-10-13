@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 # Summary: Move images files and their associated xmp sidecar
 #

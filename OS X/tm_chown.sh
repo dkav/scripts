@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 # Script to change file permissions in Time Machine backup folders.
 # Needs to execute in root.

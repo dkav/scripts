@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/zsh
 
 # Script to upgrade and clean Archlinux VM. Run under root.
 
