@@ -1,6 +1,7 @@
 #!/bin/zsh
-
-# Script to upgrade and clean Archlinux VM. Run under root.
+#
+# Script to upgrade and clean Archlinux VM.
+# Run under root.
 
 # Upgrade
 pacman -Syu --noconfirm

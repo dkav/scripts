@@ -1,9 +1,8 @@
 #!/bin/zsh
-
-# Summary: Move images files and their associated xmp sidecar
+#
+# Move images files and their associated xmp sidecar.
 #
 # Usage: mv_img_xmp <File extension of image file>
-#
 
 ext=$1
 mkdir -p $ext
