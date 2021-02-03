@@ -13,5 +13,5 @@ pacman -Sc --noconfirm
 find /var/log -type f -delete
 
 # Clear history
-rm /home/dkav/.histfile
+rm $HOME/.histfile
 history -c && history -w && exit
