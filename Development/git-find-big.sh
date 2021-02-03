@@ -2,7 +2,7 @@
 #set -x
 #
 # Shows the largest objects in a repo's pack file.
-# Written for OSX.
+# Written for macOS.
 #
 # See http://stubbisms.wordpress.com/2009/07/10/git-script-to-show-largest-pack-objects-and-trim-your-waist-line/
 # @author Antony Stubbs
