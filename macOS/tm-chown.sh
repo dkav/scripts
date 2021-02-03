@@ -1,7 +1,7 @@
 #!/bin/zsh
 #
 # Script to change file permissions in Time Machine backup folders.
-# Needs to executed in root.
+# Needs to be executed from root.
 
 olduid=501
 newuid=502
