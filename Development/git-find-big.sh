@@ -25,9 +25,10 @@ do
   # extract the SHA
   sha=`echo $y | cut -f 1 -d ' '`
   # find the objects location in the repository tree
-  other=`git rev-list --all --objects | grep $sha`
-  #lineBreak=`echo -e "\n"`
-  output="${output}\n${size},${compressedSize},${other}"
+  other=$(git rev-list --all --objects \
+        | grep "$sha" \
+        | cut -f 2- -d ' ')
+  output="${output}\n${size},${compressedSize},${sha},${other}"
 done
 
-echo -e $output | column -t -s ', '
+echo -e "$output" | column -t -s ','
