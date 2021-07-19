@@ -18,7 +18,7 @@ objects=$(git verify-pack -v .git/objects/pack/pack-*.idx \
 echo "All sizes are in kB's. The pack column is the size of the object, compressed, inside the pack file."
 
 output="size,pack,SHA,location"
-for y in $=objects
+for y in $objects
 do
   # extract the size in bytes
   size=$(($(echo $y | cut -f 5 -d ' ')/1024))

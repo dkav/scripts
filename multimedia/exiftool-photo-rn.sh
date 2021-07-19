@@ -16,6 +16,6 @@ while getopts ":s" opt; do
   esac
 done
 
-shift $(($OPTIND - 1))
+shift $((OPTIND - 1))
 
 exiftool -ext+ HEIC --ext MOV '-FileName<DateTimeOriginal' -d $fname"%%-c$2.%%le" $1

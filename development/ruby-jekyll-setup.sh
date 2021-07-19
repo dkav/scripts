@@ -6,7 +6,7 @@
 
 ruby_version=$1
 
-if [-z "$ruby_version" ]; then
+if [ -z "$ruby_version" ]; then
   echo "Usage: setup_rb <Ruby version>"
 else
   rbenv local $ruby_version

@@ -9,7 +9,7 @@ newuid=502
 bypass=/System/Library/Extensions/TMSafetyNet.kext/Contents/Helpers/bypass
 
 IFS=''
-while read dir; do
+while read -r dir; do
   echo $dir
   hddir="$dir/Macintosh HD"
   find -xP $dir -user $olduid -print0 | $bypass xargs -0 chown -h $newuid
