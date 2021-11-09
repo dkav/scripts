@@ -1,13 +1,15 @@
+#!/bin/zsh
 # Summary: Restore PostgreSQL database
 #
-# Usage: pg_restore <date>
+# Usage: pg_restore <file>
 #
-
-if [ -z "$1" ]; then
-    echo "Usage: pg_restore <date>"
+if [[ -z $1 ]]; then
+    echo "Usage: pg_restore <file>"
 else
-
-    bk_dir="$HOME/Documents/Database/Backups"
-
-    psql -f $bk_dir/pg_"$1".sql postgres
+    if [[ ! -f $1 ]]; then
+      echo "Backup file $1 does not exist"
+    else
+      psql -f $1 postgres > /dev/null
+      echo "PostgreSQL database restored from $1:a"
+    fi
 fi
