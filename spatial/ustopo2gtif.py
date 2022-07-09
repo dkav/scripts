@@ -49,6 +49,7 @@ def extract_topo(topo_in, topo_warp_opts):
         'GDAL_PDF_LAYERS_OFF',
         'Map_Collar,'
         'Images,'
+        'Map_Frame.PLSS,'
         'Map_Frame.Projection_and_Grids,'
         'Map_Frame.Terrain.Shaded_Relief')
     topo_in_ds = gdal.Open(topo_in)
