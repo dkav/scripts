@@ -44,10 +44,16 @@ set -e
 LEFT_DIR=$1; shift
 RIGHT_DIR=$1; shift
 OPTIONS="$*"
+EXCLUDE="--exclude '.DS_Store'"
 
 # Files that don't exist in Right_Dir
-rsync $OPTIONS -rin --ignore-existing "$LEFT_DIR"/ "$RIGHT_DIR"/|sed -e 's/^[^ ]* /L             /'
+rsync $OPTIONS -rin --ignore-existing --exclude '.DS_Store' \
+  "$LEFT_DIR"/ "$RIGHT_DIR"/|sed -e 's/^[^ ]* /L             /'
+
 # Files that don't exist in Left_Dir
-rsync $OPTIONS -rin --ignore-existing "$RIGHT_DIR"/ "$LEFT_DIR"/|sed -e 's/^[^ ]* /R             /'
+rsync $OPTIONS -rin --ignore-existing --exclude '.DS_Store' \
+  "$RIGHT_DIR"/ "$LEFT_DIR"/|sed -e 's/^[^ ]* /R             /'
+
 # Files that exist in both dirs but have differences
-rsync $OPTIONS -rin --existing "$LEFT_DIR"/ "$RIGHT_DIR"/|sed -e 's/^/X /'
+rsync $OPTIONS -rin --existing --exclude '.DS_Store' \
+  "$LEFT_DIR"/ "$RIGHT_DIR"/|sed -e 's/^/X /'
