@@ -1,2 +1,5 @@
+# Python
+*.py[cod]
+
 **/.venv
 Google/gd-files-del/Pipfile.lock
