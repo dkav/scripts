@@ -15,7 +15,7 @@ from pathlib import Path
 
 
 HEADER = ["app", "start_time", "end_time", "duration_seconds",
-         "created_time_coca", "device_id", "device_model"]
+         "created_time_coca", "device_model"]
 
 
 def query_database(last_created_at):
@@ -51,24 +51,18 @@ def query_database(last_created_at):
                 ZOBJECT.ZSECONDSFROMGMT,'unixepoch') AS "end",
             ZOBJECT.ZENDDATE - ZOBJECT.ZSTARTDATE AS "duration",
             ZOBJECT.ZCREATIONDATE as "creation",
-            ZSOURCE.ZDEVICEID AS "device_id",
-            ZMODEL AS "device_model"
+            ZSYNCPEER.ZMODEL AS "device_model"
         FROM
             ZOBJECT
-            LEFT JOIN
-            ZSTRUCTUREDMETADATA
-            ON ZOBJECT.ZSTRUCTUREDMETADATA = ZSTRUCTUREDMETADATA.Z_PK
-            LEFT JOIN
-            ZSOURCE
-            ON ZOBJECT.ZSOURCE = ZSOURCE.Z_PK
-            LEFT JOIN
-            ZSYNCPEER
-            ON ZSOURCE.ZDEVICEID = ZSYNCPEER.ZDEVICEID
+        LEFT JOIN
+            ZSOURCE ON ZOBJECT.ZSOURCE = ZSOURCE.Z_PK
+        LEFT JOIN
+            ZSYNCPEER ON ZSOURCE.ZDEVICEID = ZSYNCPEER.ZDEVICEID
         WHERE
-            ZSTREAMNAME = "/app/usage" AND
+            ZOBJECT.ZSTREAMNAME = "/app/usage" AND
             ZOBJECT.ZCREATIONDATE > ?
         ORDER BY
-            ZCREATIONDATE DESC
+            ZOBJECT.ZCREATIONDATE DESC
         """
         cur.execute(query, (last_created_at,))
 
