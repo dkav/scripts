@@ -6,6 +6,8 @@ REPO_DIR="$HOME/Repositories"
 # Exit if the directory doesn't exist
 [[ ! -d "$REPO_DIR" ]] && echo "Error: $REPO_DIR not found." && exit 1
 
+echo "Checking for Git stashes in all repositories..."
+
 # Iterate through directories only using the (/) glob qualifier
 for dir in "$REPO_DIR"/*(/); do
     # Run in a subshell to keep the script's working directory stable
