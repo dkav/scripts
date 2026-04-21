@@ -1,5 +1,5 @@
 #!/bin/zsh
-#
+
 # Update Ruby gems.
 
 bundle outdated

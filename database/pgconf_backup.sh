@@ -1,8 +1,8 @@
 #!/bin/zsh
-# Summary: Backup PostgreSQL config files
-#
+
+# Summary: Backup PostgreSQL config files.
 # Usage: pgconf_bakup {backup_dir}
-#
+
 db_dir="$HOME/Library/Application Support/Postgres/var-14"
 
 if [[ -z $1 ]]; then

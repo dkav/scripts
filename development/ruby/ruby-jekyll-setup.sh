@@ -1,7 +1,6 @@
 #!/bin/zsh
-#
+
 # Setup Ruby for Jekyll website project.
-#
 # Usage: setup_rb <Ruby version>
 
 ruby_version=$1

@@ -1,5 +1,5 @@
 #!/bin/zsh
-#
+
 # Add timestamp and suffix to photo.
 #
 # Usage: rn_photo file/folder <suffix>

@@ -1,6 +1,7 @@
 #!/bin/bash
+
 #set -x
-#
+
 # Shows the largest objects in a repo's pack file.
 # Written for macOS.
 #

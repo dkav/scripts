@@ -1,5 +1,5 @@
 #!/bin/zsh
-#
+
 # Script to append original recording date and time to DV clips.
 
 exiftool -d "clip-%Y-%m-%d %H;%M;%S.%%e" "-testname<DateTimeOriginal" ./*

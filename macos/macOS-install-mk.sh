@@ -1,5 +1,5 @@
 #!/bin/zsh
-#
+
 # Create a Bootable macOS High Sierra Installer.
 
 echo "Creating a Bootable macOS High Sierra Installer"

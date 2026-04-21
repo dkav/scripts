@@ -1,4 +1,5 @@
 #!/bin/bash
+
 # Compare two directories using rsync and print the differences
 # CAUTION: options MUST appear after the directories
 #

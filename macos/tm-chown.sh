@@ -1,5 +1,5 @@
 #!/bin/zsh
-#
+
 # Script to change file permissions in Time Machine backup folders.
 # Needs to be executed from root.
 
@@ -15,4 +15,3 @@ while read -r dir; do
   find -xP $dir -user $olduid -print0 | $bypass xargs -0 chown -h $newuid
   $bypass mv "$hddir/.DocumentRevisions-V100/PerUID/$olduid" "$hddir/.DocumentRevisions-V100/PerUID/$newuid"
 done < dir.csv
-

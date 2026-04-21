@@ -1,8 +1,8 @@
 #!/bin/zsh
-# Summary: Backup PostgreSQL database
-#
+
+# Summary: Backup PostgreSQL database.
 # Usage: pg_backup {backup_dir}
-#
+
 date=$(date +%Y%m%d)
 if [[ -z $1 ]]; then
   bk_dir=$PWD

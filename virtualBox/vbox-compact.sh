@@ -1,7 +1,6 @@
 #!/bin/zsh
-#
+
 # Compact VirtualBox virtual disk.
-#
 # Usage: vbox_compact <Virtual disk>
 
 vdisk=$1

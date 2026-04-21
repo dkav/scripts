@@ -1,8 +1,8 @@
 #!/bin/zsh
-# Summary: Restore PostgreSQL database
-#
+
+# Summary: Restore PostgreSQL database.
 # Usage: pg_restore <file>
-#
+
 if [[ -z $1 ]]; then
     echo "Usage: pg_restore <file>"
 else

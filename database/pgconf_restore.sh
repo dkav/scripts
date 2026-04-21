@@ -1,8 +1,8 @@
 #!/bin/zsh
-# Summary: Restore PostgreSQL database
-#
+
+# Summary: Restore PostgreSQL database.
 # Usage: Usage: pgconf_restore {backup_dir}
-#
+
 db_dir="$HOME/Library/Application Support/Postgres/var-14"
 
 if [[ -z $1 ]]; then

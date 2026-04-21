@@ -1,5 +1,5 @@
 #!/bin/zsh
-#
+
 # Rewrite author for git commit.
 
 git filter-branch --env-filter '
